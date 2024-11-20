@@ -1,7 +1,9 @@
 import '../../index.css';
 import styles from './app.module.css';
 import { Routes, Route, Outlet, useNavigate } from 'react-router-dom';
-
+import { useEffect } from 'react';
+import { useAppDispatch } from '../../services/store';
+import { fetchIngredients } from '../../services/reducers/ingredientsSlice';
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import {
   ConstructorPage,
@@ -20,6 +22,11 @@ import InfoAboutFeed from '../info-about-order/info-about-order';
 
 const App = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+  }, [dispatch]);
 
   return (
     <Routes>

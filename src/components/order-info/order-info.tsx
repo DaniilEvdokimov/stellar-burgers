@@ -17,7 +17,6 @@ export const OrderInfo: FC = () => {
 
   useEffect(() => {
     if (!orderData) dispatch(fetchFeed());
-    if (!ingredients.length) dispatch(fetchIngredients());
   }, []);
 
   /* Готовим данные для отображения */

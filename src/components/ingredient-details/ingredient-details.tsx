@@ -12,12 +12,6 @@ export const IngredientDetails: FC = () => {
   );
   const { id } = useParams();
 
-  useEffect(() => {
-    if (!ingredients.length) {
-      dispatch(fetchIngredients());
-    }
-  }, []);
-
   const ingredientData = ingredients.find((item) => item._id === id);
 
   return (

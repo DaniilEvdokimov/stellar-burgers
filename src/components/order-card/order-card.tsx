@@ -14,12 +14,6 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
   const dispatch = useAppDispatch();
   const { ingredients } = useAppSelector((state) => state.ingredientsReducer);
 
-  useEffect(() => {
-    if (!ingredients.length) {
-      dispatch(fetchIngredients());
-    }
-  }, []);
-
   const orderInfo = useMemo(() => {
     if (!ingredients.length) return null;
 
