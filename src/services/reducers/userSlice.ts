@@ -1,10 +1,11 @@
 import {
-  TLoginData,
-  TRegisterData,
   getOrdersApi,
+  getUserApi,
   loginUserApi,
   logoutApi,
   registerUserApi,
+  TLoginData,
+  TRegisterData,
   updateUserApi
 } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
@@ -46,14 +47,23 @@ export const updateUserData = createAsyncThunk(
   async (user: Partial<TRegisterData>) => await updateUserApi(user)
 );
 
-export const getUserOrders = createAsyncThunk(
-  'user/getOrders',
-  async () => await getOrdersApi()
-);
+export const getUserOrders = createAsyncThunk('user/getOrders', getOrdersApi);
 
-export const logout = createAsyncThunk(
-  'user/logout',
-  async () => await logoutApi()
+export const logout = createAsyncThunk('user/logout', logoutApi);
+
+export const autoLogin = createAsyncThunk(
+  'user/autoLogin',
+  async (_, { rejectWithValue }) => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) {
+      return rejectWithValue('No refresh token found');
+    }
+    try {
+      return await getUserApi();
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
 );
 
 export const userSlice = createSlice({
@@ -115,6 +125,18 @@ export const userSlice = createSlice({
         state.accessToken = '';
         deleteCookie('accessToken');
         state.orders = [];
+      })
+      .addCase(autoLogin.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(autoLogin.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload.user;
+      })
+      .addCase(autoLogin.rejected, (state) => {
+        state.isLoading = false;
+        state.isError = true;
       });
   }
 });

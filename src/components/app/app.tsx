@@ -1,9 +1,16 @@
 import '../../index.css';
 import styles from './app.module.css';
-import { Routes, Route, Outlet, useNavigate } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Outlet,
+  useNavigate,
+  useLocation
+} from 'react-router-dom';
 import { useEffect } from 'react';
-import { useAppDispatch } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 import { fetchIngredients } from '../../services/reducers/ingredientsSlice';
+import { autoLogin } from '../../services/reducers/userSlice';
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import {
   ConstructorPage,
@@ -22,11 +29,24 @@ import InfoAboutFeed from '../info-about-order/info-about-order';
 
 const App = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.userReducer);
 
   useEffect(() => {
     dispatch(fetchIngredients());
+
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (refreshToken) {
+      dispatch(autoLogin());
+    }
   }, [dispatch]);
+
+  useEffect(() => {
+    if (user && location.state?.from) {
+      navigate(location.state.from);
+    }
+  }, [user, location.state, navigate]);
 
   return (
     <Routes>
