@@ -13,12 +13,18 @@ export default function ProtectedRoute({
   const location = useLocation();
   const { user } = useAppSelector((state) => state.userReducer);
 
+  // Определяем предыдущую страницу или используем главную страницу как дефолтную
+  const from = location.state?.from || '/';
+
   if (!onlyUnAuth && !user) {
+    // Если доступ запрещен неавторизованным пользователям и пользователь не авторизован...
     return <Navigate replace to='/login' state={{ from: location }} />;
   }
 
+  // Если разрешен неавторизованный доступ, а пользователь авторизован...
   if (onlyUnAuth && user) {
-    return <Navigate replace to='/' state={{ from: location }} />;
+    // ...то отправляем его на предыдущую страницу
+    return <Navigate replace to={from} />;
   }
 
   return children;
