@@ -49,15 +49,18 @@ export const newOrderSlice = createSlice({
   },
   reducers: {
     addIngredient: (state, action: PayloadAction<TIngredient>) => {
-      action.payload.type !== 'bun'
-        ? (state.constructorItems.ingredients = [
-            ...state.constructorItems.ingredients,
-            { ...action.payload, id: action.payload._id }
-          ])
-        : (state.constructorItems.bun = {
-            ...action.payload,
-            id: nanoid()
-          });
+      const uniqueId = nanoid();
+      if (action.payload.type !== 'bun') {
+        state.constructorItems.ingredients = [
+          ...state.constructorItems.ingredients,
+          { ...action.payload, id: uniqueId }
+        ];
+      } else {
+        state.constructorItems.bun = {
+          ...action.payload,
+          id: uniqueId // Использование уникального ID
+        };
+      }
     },
     moveIngredient: (
       state,
