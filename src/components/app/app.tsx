@@ -110,9 +110,11 @@ const App = () => {
             <Route
               path=':number'
               element={
-                <Modal title='' onClose={() => navigate('profile/orders')}>
-                  <OrderInfo />
-                </Modal>
+                <ProtectedRoute>
+                  <Modal title='' onClose={() => navigate('profile/orders')}>
+                    <OrderInfo />
+                  </Modal>
+                </ProtectedRoute>
               }
             />
           </Route>
