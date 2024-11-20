@@ -1,11 +1,6 @@
 import { getIngredientsApi } from '@api';
-import {
-  createAsyncThunk,
-  createSelector,
-  createSlice
-} from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
-import { RootState } from '../store';
 
 type TIngredientsState = {
   isLoading: boolean;
