@@ -5,19 +5,28 @@ import { TIngredient } from '@utils-types';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { useParams } from 'react-router-dom';
 import { fetchFeed } from '../../services/reducers/feedSlice';
-import { fetchIngredients } from '../../services/reducers/ingredientsSlice';
+import { fetchOrders } from '../../services/reducers/ordersSlice';
 
 export const OrderInfo: FC = () => {
   const { number } = useParams();
   const dispatch = useAppDispatch();
   const { ingredients } = useAppSelector((state) => state.ingredientsReducer);
-  const orderData = useAppSelector((state) =>
+  const { orders } = useAppSelector((state) => state.ordersReducer);
+  const feedOrder = useAppSelector((state) =>
     state.feedReducer.orders.find((item) => item.number === Number(number))
   );
+  const orderData =
+    feedOrder || orders.find((item) => item.number === Number(number));
 
   useEffect(() => {
-    if (!orderData) dispatch(fetchFeed());
-  }, []);
+    if (!orderData) {
+      if (location.pathname.startsWith('/profile/orders')) {
+        dispatch(fetchOrders());
+      } else {
+        dispatch(fetchFeed());
+      }
+    }
+  }, [dispatch, orderData, location.pathname]);
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {

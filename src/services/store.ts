@@ -3,6 +3,7 @@ import ingredientsReducer from './reducers/ingredientsSlice';
 import newOrderReducer from './reducers/newOrderSlice';
 import feedReducer from './reducers/feedSlice';
 import userReducer from './reducers/userSlice';
+import ordersReducer from './reducers/ordersSlice';
 
 import {
   TypedUseSelectorHook,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   ingredientsReducer,
   newOrderReducer,
   feedReducer,
+  ordersReducer,
   userReducer
 });
 
