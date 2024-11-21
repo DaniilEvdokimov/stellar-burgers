@@ -24,8 +24,6 @@ import {
   ResetPassword
 } from '@pages';
 import ProtectedRoute from '../protected-route/protected-route';
-import InfoAboutIngredient from '../info-about-ingredient/info-about-ingredient';
-import InfoAboutFeed from '../info-about-order/info-about-order';
 
 const App = () => {
   const navigate = useNavigate();
@@ -33,6 +31,7 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.userReducer);
 
+  // Получаем информацию о фоновом состоянии
   const background = location.state?.background;
 
   useEffect(() => {
@@ -100,15 +99,16 @@ const App = () => {
             }
           >
             <Route index element={<Profile />} />
-            <Route path='orders' element={<ProfileOrders />}>
-              <Route path=':number' element={<OrderInfo />} />
-            </Route>
+            <Route path='orders' element={<ProfileOrders />} />
+            <Route path='orders/:number' element={<OrderInfo />} />
           </Route>
           <Route path='*' element={<NotFound404 />} />
         </Route>
       </Routes>
 
-      {background && (
+      {(background ||
+        location.pathname.startsWith('/feed/') ||
+        location.pathname.startsWith('/profile/orders/')) && (
         <Routes>
           <Route
             path='feed/:number'

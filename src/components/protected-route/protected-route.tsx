@@ -1,5 +1,6 @@
 import { useLocation, Navigate } from 'react-router-dom';
 import { useAppSelector } from '../../services/store';
+import { Preloader } from '../ui/preloader';
 
 type ProtectedRouteProps = {
   onlyUnAuth?: boolean;
@@ -11,10 +12,15 @@ export default function ProtectedRoute({
   children
 }: ProtectedRouteProps) {
   const location = useLocation();
-  const { user } = useAppSelector((state) => state.userReducer);
+  const { user, isLoading } = useAppSelector((state) => state.userReducer);
 
   // Определяем предыдущую страницу или используем главную страницу как дефолтную
   const from = location.state?.from || '/';
+
+  if (isLoading) {
+    // Если данные пользователя загружаются, показываем прелоадер
+    return <Preloader />;
+  }
 
   if (!onlyUnAuth && !user) {
     // Если доступ запрещен неавторизованным пользователям и пользователь не авторизован...
