@@ -23,7 +23,7 @@ export const BurgerConstructor: FC = () => {
 
   const onOrderClick = () => {
     if (!user && !isLoading)
-      navigate('/login', {
+      return navigate('/login', {
         state: { locationState: { background: location } }
       });
     if (constructorItems.bun && !orderRequest) {

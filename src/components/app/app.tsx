@@ -106,9 +106,7 @@ const App = () => {
         </Route>
       </Routes>
 
-      {(background ||
-        location.pathname.startsWith('/feed/') ||
-        location.pathname.startsWith('/profile/orders/')) && (
+      {background && (
         <Routes>
           <Route
             path='feed/:number'
